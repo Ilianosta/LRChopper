@@ -11,6 +11,8 @@ public class CameraManager : MonoBehaviour
     private float shakeIntensity;
     private float shakeTimerTotal;
 
+    float BaseShakeIntensity => shakeIntensity = .5f / GameManager.instance.GetDifficultyPercentage();
+
     private void Awake()
     {
         if (CameraManager.instance) Destroy(this);
@@ -21,8 +23,7 @@ public class CameraManager : MonoBehaviour
     {
         if (perlinNoise != null)
         {
-            perlinNoise.AmplitudeGain = intensity;
-            shakeIntensity = intensity;
+            shakeIntensity = BaseShakeIntensity * intensity;
             shakeTimerTotal = duration;
             shakeTimer = duration;
         }
@@ -44,6 +45,21 @@ public class CameraManager : MonoBehaviour
             {
                 // Finaliza el temblor
                 perlinNoise.AmplitudeGain = 0f;
+            }
+        }
+        else
+        {
+            // Debug.Log("Difficulty: " + GameManager.instance.GetDifficultyPercentage());
+            if (GameManager.instance.GetDifficultyPercentage() < .8f && GameManager.instance.gameStarted)
+            {
+                shakeIntensity = BaseShakeIntensity;
+                perlinNoise.AmplitudeGain = shakeIntensity;
+                perlinNoise.FrequencyGain = shakeIntensity;
+            }
+            else
+            {
+                perlinNoise.AmplitudeGain = 0;
+                perlinNoise.FrequencyGain = 0;
             }
         }
     }

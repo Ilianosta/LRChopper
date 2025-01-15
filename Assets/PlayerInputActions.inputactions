@@ -151,12 +151,12 @@
             "id": "5f36f5c9-dc5f-49d5-88f3-ba4be819c7c2",
             "actions": [
                 {
-                    "name": "New action",
+                    "name": "Restart",
                     "type": "Button",
                     "id": "ad795069-4a6b-4246-813b-59b17d6886e2",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "",
+                    "interactions": "Press",
                     "initialStateCheck": false
                 }
             ],
@@ -164,11 +164,11 @@
                 {
                     "name": "",
                     "id": "a943ad95-9495-43d8-a98e-e66351be232b",
-                    "path": "",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "New action",
+                    "action": "Restart",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

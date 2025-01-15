@@ -3,7 +3,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
-    [SerializeField] float timeToClick = 3f;
+    [SerializeField] float startingTimeToClick = 3f;
     [SerializeField] AnimationCurve timeToClickCurve;
     float score;
     float actualTimeToClick;
@@ -51,7 +51,7 @@ public class GameManager : MonoBehaviour
     public void StartGame()
     {
         score = 0;
-        actualTimeToClick = timeToClick;
+        actualTimeToClick = startingTimeToClick;
         UIManager.instance.ShowGamePanel();
         gameStarted = true;
         SuscribeToStart(false);
@@ -70,6 +70,7 @@ public class GameManager : MonoBehaviour
         gameStarted = false;
         CheckSaveKey(HIGHSCORE_SAVEKEY, score);
         UIManager.instance.ShowLosePanel();
+        AudioManager.Instance.PlayLoseSFX();
     }
 
     public void RestartGame()
@@ -78,9 +79,16 @@ public class GameManager : MonoBehaviour
         UIManager.instance.ShowStartPanel();
     }
 
-    private float GetClampedLimitTimeToClick()
+    public float GetClampedLimitTimeToClick()
     {
-        return Mathf.Clamp(timeToClick * timeToClickCurve.Evaluate(score / 10), limitTimeToClick, timeToClick);
+        return Mathf.Clamp(startingTimeToClick * timeToClickCurve.Evaluate(score / 10), limitTimeToClick, startingTimeToClick);
+    }
+
+    public float GetDifficultyPercentage()
+    {
+        float actualTime = GetClampedLimitTimeToClick();
+        float percentage = actualTime / startingTimeToClick;
+        return percentage;
     }
 
     private float CheckSaveKey(string saveKey, float value)

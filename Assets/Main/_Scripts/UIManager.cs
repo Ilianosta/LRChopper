@@ -1,3 +1,4 @@
+using System;
 using AssetKits.ParticleImage;
 using TMPro;
 using UnityEngine;
@@ -8,6 +9,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     [SerializeField] private GameObject startPanel, gamePanel, losePanel;
     [SerializeField] private Image timeToClickImage;
+    [SerializeField] private Image difficultyImg;
     [SerializeField] private TMP_Text pointsText, losePointsText, startText, highScoreText;
     [SerializeField] private ParticleImage puffParticle;
     [SerializeField] private UIMovingItem clock;
@@ -22,6 +24,24 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         UpdateInputTexts();
+    }
+
+    private void Update()
+    {
+        if (GameManager.instance.gameStarted)
+        {
+            Color difficultyColor = difficultyImg.color;
+            difficultyColor.a = Mathf.Lerp(0.20f, 0, GameManager.instance.GetDifficultyPercentage());
+            // Debug.Log("Difficulty percentage: " + GameManager.instance.GetDifficultyPercentage() + " || Color: " + difficultyColor.ToString());
+            difficultyImg.color = difficultyColor;
+        }
+        else
+        {
+            Color difficultyColor = difficultyImg.color;
+            difficultyColor.a = 0;
+            difficultyImg.color = difficultyColor;
+        }
+
     }
 
     public void UpdateTimeToClick(float time, float limitTime)

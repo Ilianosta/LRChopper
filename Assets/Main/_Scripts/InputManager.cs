@@ -38,7 +38,7 @@ public class InputManager : MonoBehaviour
 
         UIManager.instance.UpdateInputTexts();
 
-        Debug.Log("Dispositivo detectado: " + device.displayName);
+        // Debug.Log("Dispositivo detectado: " + device.displayName);
     }
     public string GetBindingForAction(string actionName)
     {
@@ -50,7 +50,7 @@ public class InputManager : MonoBehaviour
         }
 
         InputControl control = action.controls.Where(c => c.device == actualDevice).FirstOrDefault();
-        Debug.Log("Action: " + action.name + " || Binding: " + control.displayName);
+        // Debug.Log("Action: " + action.name + " || Binding: " + control.displayName);
 
         return control.displayName;
     }

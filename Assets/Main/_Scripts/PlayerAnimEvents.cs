@@ -9,4 +9,9 @@ public class PlayerAnimEvents : MonoBehaviour
         Instantiate(punchPS.gameObject, punchPSPosition.position, Quaternion.identity);
         CameraManager.instance.ShakeCamera(2, 0.3f);
     }
+
+    public void SendPunchAudioClip()
+    {
+        AudioManager.Instance.PlayChopSFX();
+    }
 }
