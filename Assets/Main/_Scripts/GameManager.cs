@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour
     float actualTimeToClick;
     float limitTimeToClick = 0.25f;
 
+    const string HIGHSCORE_SAVEKEY = "HighScoreKey";
+
     public bool gameStarted { get; private set; }
 
     private void Awake()
@@ -66,6 +68,7 @@ public class GameManager : MonoBehaviour
     public void Lose()
     {
         gameStarted = false;
+        CheckSaveKey(HIGHSCORE_SAVEKEY, score);
         UIManager.instance.ShowLosePanel();
     }
 
@@ -78,5 +81,26 @@ public class GameManager : MonoBehaviour
     private float GetClampedLimitTimeToClick()
     {
         return Mathf.Clamp(timeToClick * timeToClickCurve.Evaluate(score / 10), limitTimeToClick, timeToClick);
+    }
+
+    private float CheckSaveKey(string saveKey, float value)
+    {
+        if (PlayerPrefs.HasKey(saveKey))
+        {
+            if (PlayerPrefs.GetFloat(saveKey) < value)
+            {
+                PlayerPrefs.SetFloat(saveKey, value);
+            }
+        }
+        else
+        {
+            PlayerPrefs.SetFloat(saveKey, value);
+        }
+        return PlayerPrefs.GetFloat(saveKey);
+    }
+
+    public float GetHighScore()
+    {
+        return PlayerPrefs.GetFloat(HIGHSCORE_SAVEKEY);
     }
 }

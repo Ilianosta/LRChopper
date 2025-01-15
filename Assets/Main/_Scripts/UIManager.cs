@@ -8,7 +8,7 @@ public class UIManager : MonoBehaviour
     public static UIManager instance;
     [SerializeField] private GameObject startPanel, gamePanel, losePanel;
     [SerializeField] private Image timeToClickImage;
-    [SerializeField] private TMP_Text pointsText, losePointsText, startText;
+    [SerializeField] private TMP_Text pointsText, losePointsText, startText, highScoreText;
     [SerializeField] private ParticleImage puffParticle;
     [SerializeField] private UIMovingItem clock;
     private void Awake()
@@ -53,6 +53,7 @@ public class UIManager : MonoBehaviour
         gamePanel.SetActive(false);
         losePanel.SetActive(true);
         losePointsText.text = pointsText.text;
+        highScoreText.text = GameManager.instance.GetHighScore().ToString();
         PlayParticlePuff();
     }
 
