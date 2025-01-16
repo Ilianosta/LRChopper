@@ -11,7 +11,7 @@ public class CameraManager : MonoBehaviour
     private float shakeIntensity;
     private float shakeTimerTotal;
 
-    float BaseShakeIntensity => shakeIntensity = .5f / GameManager.instance.GetDifficultyPercentage();
+    float BaseShakeIntensity => shakeIntensity = .4f / GameManager.instance.GetDifficultyPercentage();
 
     private void Awake()
     {

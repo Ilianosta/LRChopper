@@ -3,14 +3,16 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 public class InputManager : MonoBehaviour
 {
     public static InputManager instance;
     [SerializeField] private ObstacleGenerator obstacleGenerator;
+    [SerializeField] private Button btnLeft, btnRight;
     PlayerInput playerInput;
 
-    public event Action OnPressSomething;
+    public event Action OnPressStart;
     public event Action OnLeftPressed;
     public event Action OnRightPressed;
 
@@ -29,6 +31,9 @@ public class InputManager : MonoBehaviour
         });
 
         actualDevice = playerInput.devices[0];
+
+        btnLeft.onClick.AddListener(() => OnLeft(null));
+        btnRight.onClick.AddListener(() => OnRight(null));
     }
 
     private void OnInputPerformed(InputAction.CallbackContext context)
@@ -38,16 +43,23 @@ public class InputManager : MonoBehaviour
 
         UIManager.instance.UpdateInputTexts();
 
-        // Debug.Log("Dispositivo detectado: " + device.displayName);
+        if (actualDevice.displayName == "Touchscreen")
+        {
+            UIManager.instance.ShowTouchPanel(true);
+        }
+        else
+        {
+            UIManager.instance.ShowTouchPanel(false);
+        }
+        Debug.Log("Dispositivo detectado: " + device.displayName);
     }
     public string GetBindingForAction(string actionName)
     {
         InputAction action = playerInput.actions.Where(a => a.name == actionName).FirstOrDefault();
 
-        if (actualDevice.displayName == "Mouse")
-        {
-            actualDevice = playerInput.GetDevice<Keyboard>();
-        }
+        if (actualDevice.displayName == "Mouse") actualDevice = playerInput.GetDevice<Keyboard>();
+        if(actualDevice.displayName == "Touchscreen") return "anywhere";
+
 
         InputControl control = action.controls.Where(c => c.device == actualDevice).FirstOrDefault();
         // Debug.Log("Action: " + action.name + " || Binding: " + control.displayName);
@@ -81,6 +93,6 @@ public class InputManager : MonoBehaviour
     {
         if (GameManager.instance.gameStarted) return;
 
-        OnPressSomething?.Invoke();
+        OnPressStart?.Invoke();
     }
 }

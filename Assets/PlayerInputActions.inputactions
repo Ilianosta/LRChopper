@@ -143,6 +143,17 @@
                     "action": "Start",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "738e248a-e92f-47b2-af80-9974503223c3",
+                    "path": "<Touchscreen>/primaryTouch/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Start",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         },
@@ -165,6 +176,17 @@
                     "name": "",
                     "id": "a943ad95-9495-43d8-a98e-e66351be232b",
                     "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Restart",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ea6b3feb-3955-4fc8-835d-f571c47b2451",
+                    "path": "<Touchscreen>/primaryTouch/tap",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

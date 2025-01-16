@@ -7,12 +7,13 @@ using UnityEngine.UI;
 public class UIManager : MonoBehaviour
 {
     public static UIManager instance;
-    [SerializeField] private GameObject startPanel, gamePanel, losePanel;
+    [SerializeField] private GameObject startPanel, gamePanel, losePanel, touchPanel, controlsPanel;
     [SerializeField] private Image timeToClickImage;
     [SerializeField] private Image difficultyImg;
     [SerializeField] private TMP_Text pointsText, losePointsText, startText, highScoreText;
     [SerializeField] private ParticleImage puffParticle;
     [SerializeField] private UIMovingItem clock;
+    [SerializeField] private Slider musicSlider, sfxSlider;
     private void Awake()
     {
         if (UIManager.instance) Destroy(this);
@@ -24,6 +25,8 @@ public class UIManager : MonoBehaviour
     private void Start()
     {
         UpdateInputTexts();
+        musicSlider.value = AudioManager.Instance.GetVolumePercentage(AudioManager.AudioType.MusicVolume);
+        sfxSlider.value = AudioManager.Instance.GetVolumePercentage(AudioManager.AudioType.SFXVolume);
     }
 
     private void Update()
@@ -91,6 +94,12 @@ public class UIManager : MonoBehaviour
     {
         string binding = InputManager.instance.GetBindingForAction("Start");
         startText.text = "Press " + binding + " to start";
+    }
+
+    public void ShowTouchPanel(bool show)
+    {
+        touchPanel.SetActive(show);
+        controlsPanel.SetActive(!show);
     }
 
     [System.Serializable]

@@ -5,10 +5,10 @@ public class GameManager : MonoBehaviour
     public static GameManager instance;
     [SerializeField] float startingTimeToClick = 3f;
     [SerializeField] AnimationCurve timeToClickCurve;
-    float score;
+    float score = 0;
     float actualTimeToClick;
     float limitTimeToClick = 0.25f;
-
+    bool readyToStart = true;
     const string HIGHSCORE_SAVEKEY = "HighScoreKey";
 
     public bool gameStarted { get; private set; }
@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour
 
     private void SuscribeToStart(bool suscribe)
     {
-        if (suscribe) InputManager.instance.OnPressSomething += StartGame;
-        else InputManager.instance.OnPressSomething -= StartGame;
+        if (suscribe) InputManager.instance.OnPressStart += StartGame;
+        else InputManager.instance.OnPressStart -= StartGame;
     }
 
     private void Update()
@@ -50,11 +50,20 @@ public class GameManager : MonoBehaviour
 
     public void StartGame()
     {
-        score = 0;
-        actualTimeToClick = startingTimeToClick;
-        UIManager.instance.ShowGamePanel();
-        gameStarted = true;
-        SuscribeToStart(false);
+        if (readyToStart)
+        {
+            readyToStart = false;
+            score = 0;
+            actualTimeToClick = startingTimeToClick;
+            UIManager.instance.ShowGamePanel();
+            gameStarted = true;
+            SuscribeToStart(false);
+        }
+        else
+        {
+            UIManager.instance.ShowStartPanel();
+            readyToStart = true;
+        }
     }
 
     public void AddScore(Obstacle obstacle)
@@ -71,12 +80,12 @@ public class GameManager : MonoBehaviour
         CheckSaveKey(HIGHSCORE_SAVEKEY, score);
         UIManager.instance.ShowLosePanel();
         AudioManager.Instance.PlayLoseSFX();
+        SuscribeToStart(true);
     }
 
     public void RestartGame()
     {
-        SuscribeToStart(true);
-        UIManager.instance.ShowStartPanel();
+        StartGame();
     }
 
     public float GetClampedLimitTimeToClick()

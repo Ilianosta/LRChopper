@@ -3,6 +3,12 @@ using UnityEngine.Audio;
 
 public class AudioManager : MonoBehaviour
 {
+    public enum AudioType
+    {
+        MasterVolume,
+        MusicVolume,
+        SFXVolume
+    }
     public static AudioManager Instance;
 
     [Header("Audio Mixer")]
@@ -31,14 +37,30 @@ public class AudioManager : MonoBehaviour
     }
 
     #region Volumen
+    public float GetVolumePercentage(AudioType audioType)
+    {
+        audioMixer.GetFloat(audioType.ToString(), out float volume);
+        float linearValue = DbToLinear(volume);
+        return linearValue;
+    }
     public void SetMusicVolume(float volume)
     {
-        audioMixer.SetFloat("MusicVolume", Mathf.Log10(volume) * 20); // Convierte a escala logarítmica
+        if (volume == 0)
+        {
+            audioMixer.SetFloat(AudioType.MusicVolume.ToString(), -80);
+            return;
+        }
+        audioMixer.SetFloat(AudioType.MusicVolume.ToString(), Mathf.Log10(volume) * 20); // Convierte a escala logarítmica
     }
 
     public void SetSFXVolume(float volume)
     {
-        audioMixer.SetFloat("SFXVolume", Mathf.Log10(volume) * 20); // Convierte a escala logarítmica
+        if (volume == 0)
+        {
+            audioMixer.SetFloat(AudioType.SFXVolume.ToString(), -80);
+            return;
+        }
+        audioMixer.SetFloat(AudioType.SFXVolume.ToString(), Mathf.Log10(volume) * 20); // Convierte a escala logarítmica
     }
     #endregion
 
@@ -65,4 +87,16 @@ public class AudioManager : MonoBehaviour
         PlaySFX(loseSfx);
     }
     #endregion
+
+    // Convierte de dB a escala lineal (0 a 1)
+    private float DbToLinear(float db)
+    {
+        return Mathf.Pow(10, db / 20);
+    }
+
+    // Convierte de escala lineal (0 a 1) a dB
+    private float LinearToDb(float linear)
+    {
+        return linear > 0 ? 20 * Mathf.Log10(linear) : -80f; // -80 dB es el mínimo estándar en Unity
+    }
 }
